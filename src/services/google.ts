@@ -1,9 +1,9 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GOOGLE_OAUTH_CLIENT_ID } from '@env';
 
 export function configureGoogleSignin() {
   GoogleSignin.configure({
-    webClientId:
-      '163485259394-2v5u9827ohut24rtfo4vgpo8o9h82a5i.apps.googleusercontent.com',
+    webClientId: GOOGLE_OAUTH_CLIENT_ID,
   });
 }
 
