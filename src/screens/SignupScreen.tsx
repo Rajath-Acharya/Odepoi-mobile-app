@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Image,
+  ScrollView,
+  Pressable,
+  Alert,
+} from 'react-native';
+import { signInWithGoogle } from '../services/google';
 
 export default function SignupScreen({ navigation }: any) {
   const [username, setUsername] = useState('');
@@ -10,23 +20,22 @@ export default function SignupScreen({ navigation }: any) {
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, backgroundColor: '#0b0e14' }}
     >
-      <Image
-        source={{
-          uri: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200',
-        }}
-        style={{ height: 220 }}
-        resizeMode="cover"
-      />
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 24, flexGrow: 1, justifyContent: 'center' }}>
         <Text
           style={{
             color: '#e6eaf2',
             fontWeight: '700',
             textAlign: 'center',
-            marginBottom: 12,
+            marginBottom: 6,
+            fontSize: 24,
           }}
         >
-          Join the Ride
+          Sign up now
+        </Text>
+        <Text
+          style={{ color: '#9aa0a6', textAlign: 'center', marginBottom: 18 }}
+        >
+          Please fill the details and create account
         </Text>
 
         <TextInput
@@ -78,19 +87,44 @@ export default function SignupScreen({ navigation }: any) {
           }}
         />
 
-        <Button
-          title="Create Account"
-          onPress={() => navigation.replace('Tabs')}
-        />
+        <Button title="Sign Up" onPress={() => navigation.replace('Tabs')} />
         <Text style={{ color: '#9aa0a6', textAlign: 'center', marginTop: 14 }}>
           Already have an account?{' '}
           <Text
             style={{ color: '#2aa3ff' }}
             onPress={() => navigation.navigate('Login')}
           >
-            Log In
+            Sign in
           </Text>
         </Text>
+
+        <Text style={{ color: '#9aa0a6', textAlign: 'center', marginTop: 18 }}>
+          Or connect
+        </Text>
+        <View style={{ alignItems: 'center', marginTop: 12 }}>
+          <Pressable
+            onPress={async () => {
+              try {
+                const res = await signInWithGoogle();
+                if (res?.data || (res as any)?.user) {
+                  navigation.replace('Tabs');
+                }
+              } catch (e: any) {
+                Alert.alert('Google Sign-In failed', e?.message || String(e));
+              }
+            }}
+            style={{
+              backgroundColor: '#121722',
+              paddingVertical: 10,
+              paddingHorizontal: 16,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#1b2230',
+            }}
+          >
+            <Text style={{ color: '#e6eaf2' }}>Continue with Google</Text>
+          </Pressable>
+        </View>
       </View>
     </ScrollView>
   );

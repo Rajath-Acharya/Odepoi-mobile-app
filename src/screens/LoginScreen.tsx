@@ -7,7 +7,9 @@ import {
   Image,
   ScrollView,
   Pressable,
+  Alert,
 } from 'react-native';
+import { signInWithGoogle } from '../services/google';
 
 export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
@@ -18,26 +20,25 @@ export default function LoginScreen({ navigation }: any) {
       contentContainerStyle={{ flexGrow: 1, backgroundColor: '#0b0e14' }}
       keyboardShouldPersistTaps="handled"
     >
-      <Image
-        source={{
-          uri: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200',
-        }}
-        style={{ height: 220 }}
-        resizeMode="cover"
-      />
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 24, flexGrow: 1, justifyContent: 'center' }}>
         <Text
           style={{
             color: '#e6eaf2',
             fontWeight: '700',
             textAlign: 'center',
-            marginBottom: 12,
+            marginBottom: 6,
+            fontSize: 24,
           }}
         >
-          Welcome Back
+          Sign in now
+        </Text>
+        <Text
+          style={{ color: '#9aa0a6', textAlign: 'center', marginBottom: 18 }}
+        >
+          Please sign in to continue our app
         </Text>
         <TextInput
-          placeholder="Email or username"
+          placeholder="Email"
           placeholderTextColor="#6b7280"
           value={email}
           onChangeText={setEmail}
@@ -69,11 +70,13 @@ export default function LoginScreen({ navigation }: any) {
           }}
         />
         <Pressable onPress={() => {}}>
-          <Text style={{ color: '#9aa0a6', marginBottom: 12 }}>
-            Forgot Password?
+          <Text
+            style={{ color: '#2aa3ff', marginBottom: 12, textAlign: 'right' }}
+          >
+            Forget Password?
           </Text>
         </Pressable>
-        <Button title="Log In" onPress={() => navigation.replace('Tabs')} />
+        <Button title="Sign In" onPress={() => navigation.replace('Tabs')} />
 
         <Text style={{ color: '#9aa0a6', textAlign: 'center', marginTop: 14 }}>
           Don't have an account?{' '}
@@ -81,9 +84,38 @@ export default function LoginScreen({ navigation }: any) {
             style={{ color: '#2aa3ff' }}
             onPress={() => navigation.navigate('Signup')}
           >
-            Sign Up
+            Sign up
           </Text>
         </Text>
+
+        <Text style={{ color: '#9aa0a6', textAlign: 'center', marginTop: 18 }}>
+          Or connect
+        </Text>
+
+        <View style={{ alignItems: 'center', marginTop: 12 }}>
+          <Pressable
+            onPress={async () => {
+              try {
+                const res = await signInWithGoogle();
+                if (res?.data || (res as any)?.user) {
+                  navigation.replace('Tabs');
+                }
+              } catch (e: any) {
+                Alert.alert('Google Sign-In failed', e?.message || String(e));
+              }
+            }}
+            style={{
+              backgroundColor: '#121722',
+              paddingVertical: 10,
+              paddingHorizontal: 16,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#1b2230',
+            }}
+          >
+            <Text style={{ color: '#e6eaf2' }}>Continue with Google</Text>
+          </Pressable>
+        </View>
       </View>
     </ScrollView>
   );
