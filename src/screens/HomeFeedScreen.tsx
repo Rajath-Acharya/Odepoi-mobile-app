@@ -3,13 +3,13 @@ import {
   View,
   Text,
   FlatList,
-  SafeAreaView,
   TextInput,
   ScrollView,
   Pressable,
 } from 'react-native';
 import TripCard from '../components/TripCard';
 import PostCard from '../components/PostCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const mockData = [
   {
@@ -103,8 +103,6 @@ export default function HomeFeedScreen() {
               <Chip label="Popular" active />
               <Chip label="Newest" />
               <Chip label="Upcoming" />
-              <Chip label="Weekend" />
-              <Chip label="Beginner" />
             </ScrollView>
           </View>
         }
